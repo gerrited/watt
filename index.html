@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width" />
+	<title>Watt?</title>
+	<link rel="stylesheet" href="css/normalize.css" />
+	<link rel="stylesheet" href="css/foundation.css" />
+	<script src="js/vendor/custom.modernizr.js"></script>
+</head>
+<body>	
+	<form data-abide>
+	<fieldset>
+	<legend>Watt?</legend>
+
+	<div class="row">
+	<div class="large-4 columns" data-tooltip data-options="disable-for-touch:true" class="has-tip" title="Verbrauch in Watt (z.B. 60 f&uuml;r 60 Watt)">
+		<div class="row collapse">
+		<label>Verbrauch</label>
+		<div class="small-9 columns">
+			<input type="text" name="watt" placeholder="60">
+		</div>
+		<div class="small-3 columns">
+			<span class="postfix">Watt</span>
+		</div>
+		</div>
+	</div>
+	<div class="large-4 columns" data-tooltip data-options="disable-for-touch:true" class="has-tip" title="Nutzungsdauer in Stunden (z.B. 4 f&uuml;r 4 Stunden)">
+		<div class="row collapse">
+		<label>T&auml;gliche Nutzungsdauer</label>
+		<div class="small-9 columns">
+			<input type="text" name="dauer" placeholder="24">
+		</div>
+		<div class="small-3 columns">
+			<span class="postfix">Stunden</span>
+		</div>
+		</div>
+	</div>
+	<div class="large-4 columns" data-tooltip data-options="disable-for-touch:true" class="has-tip" title="Aktueller Preis pro kWh in Euro (z.B. 26 f&uuml;r 26 ct/kWh)">
+		<div class="row collapse">
+		<label>Preis</label>
+		<div class="small-9 columns">
+			<input type="text" name="preis" placeholder="26">
+		</div>
+		<div class="small-3 columns">
+			<span class="postfix">ct/kWh</span>
+		</div>
+		</div>
+	</div>
+	</div>
+
+	</fieldset>
+	</form>
+	
+	<div class="row">
+		<div class="large-12 columns">
+			<table class="large-12 columns">
+			<tr>
+			<td>Kosten pro Tag</td>
+			<td id="kostenTag"></td>
+			</tr>
+			<tr>
+			<td>Kosten pro Woche</td>
+			<td id="kostenWoche"></td>
+			</tr>
+			<tr>
+			<td>Kosten pro Monat</td>
+			<td id="kostenMonat"></td>
+			</tr>
+			<tr>
+			<td>Kosten pro Jahr</td>
+			<td id="kostenJahr"></td>
+			</tr>
+			</table>
+		</div>
+	</div>
+
+	<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+	<script src="js/foundation/foundation.js"></script>
+	<script src="/javascripts/plugins/jquery.textchange.js"></script>
+	<script>$(document).foundation();</script>
+	
+	<script>
+	$(function() {
+		calc();
+	});
+	
+	$("input[type='text']").change(function() {
+		calc();
+	});
+	
+	function calc(){
+		var watt = getValue($("input[name='watt']").get(0));
+		var dauer = getValue($("input[name='dauer']").get(0));
+		var preis = getValue($("input[name='preis']").get(0)) / 100;		
+		displayResult($("#kostenTag"), watt * dauer / 1000 * preis);
+		displayResult($("#kostenWoche"), watt * dauer * 7 / 1000 * preis);
+		displayResult($("#kostenMonat"), watt * dauer * 30 / 1000 * preis);
+		displayResult($("#kostenJahr"), watt * dauer * 365 / 1000 * preis);
+	}
+	
+	function displayResult(divContainer, result){
+		divContainer.text('\u20AC ' + (Math.round(result * 100) / 100).toLocaleString());
+	}
+	
+	function getValue(field){
+		if ($( field ).val().length) return $( field ).val();
+		else return $(field).attr("placeholder");
+	}
+	
+	</script>
+	
+</body>
+</html>
